@@ -29,7 +29,8 @@ export default defineConfig(async () => {
       port: 8080
     },
     optimizeDeps: {
-      esbuildOptions: {target: 'es2020'}
+      esbuildOptions: {target: 'es2020'},
+      exclude: ["@loaders.gl/3d-tiles"]
     }
   };
 });
