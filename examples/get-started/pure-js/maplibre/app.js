@@ -70,7 +70,7 @@ document.body.appendChild(sliderContainer);
 // Add event listener to update the value display
 slider.addEventListener('input', (event) => {
     sliderValue.textContent = event.target.value;
-    window.metresUp = event.target.value >> 0;
+    window.depthBias = event.target.value >> 0;
     updateLayer();
 });
 
@@ -170,7 +170,7 @@ const PATH = "WaikatoFarm/tileset.json";
 //const HOST = "https://bertt.github.io/";
 //const PATH = "grenoble/buildings/tileset.json";
 
-window.metresUp = 0;
+window.depthBias = 0;
 
 
 window.tile3dLayer = new Tile3DLayer({
@@ -180,6 +180,9 @@ window.tile3dLayer = new Tile3DLayer({
 
       loaders: Tiles3DLoader,
       sizeScale: 2,
+      parameters: {
+        depthBias: -window.depthBias,
+      },
       onTilesetLoad: (tileset) => { 
         console.info("TILESET", tileset); 
         window.tileset = tileset;
@@ -193,28 +196,17 @@ window.tile3dLayer = new Tile3DLayer({
           tile.content = null;
         }
       },
-      _subLayerProps: {
-        scenegraph: {
-          getTranslation: [0, -window.metresUp, 0],
-          updateTriggers: { getTranslation: [window.metresUp] }
-        }
-      }
 });
 
 function updateLayer() {
   console.log("before")
   console.log(window.tile3dLayer);
-  /*window.tile3dLayer._subLayerProps = {
-    scenegraph: {
-      getTranslation: d => [0, -window.metresUp, 0],
-      updateTriggers: { getTranslation: [window.metresUp] }
-    }
-  };*/
   window.tile3dLayer = new Tile3DLayer({
       id: "tile3dLayer",
       data: HOST + PATH,
-      //parameters: {depthTest: false},
-
+      parameters: {
+        depthBias: -window.depthBias,
+      },
       loaders: Tiles3DLoader,
       sizeScale: 2,
       onTilesetLoad: (tileset) => { 
@@ -230,12 +222,6 @@ function updateLayer() {
           tile.content = null;
         }
       },
-      _subLayerProps: {
-        scenegraph: {
-          getTranslation: [0, -window.metresUp, 0],
-          updateTriggers: { getTranslation: [window.metresUp] }
-        }
-      }
     });
   console.log("after")
   console.log(window.tile3dLayer);
